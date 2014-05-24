@@ -12,6 +12,9 @@ var layer = new Kinetic.Layer();
 var imageObject = new Image();
 imageObject.src = 'img/map.png';
 imageObject.onload = function() {
+    var maxRadius = 64;
+
+    // global map
     var globalMap = new Kinetic.Image({
         x: 0,
         y: 0,
@@ -20,6 +23,7 @@ imageObject.onload = function() {
         height: stageHeight
     });
 
+    // area map
     var areaMap = {
         'gresik': new Kinetic.Path({
             x: 0,
@@ -86,6 +90,7 @@ imageObject.onload = function() {
         })
     };
 
+    //area label
     var areaLabel = {
         'gresik': {
             'text': 'Kabupaten Gresik',
@@ -138,30 +143,6 @@ imageObject.onload = function() {
         }
     };
 
-    var areaIndicatorData = {
-        'gresik': {
-            'maxRadius': 78
-        },
-        'sidoarjo': {
-            'maxRadius': 78
-        },
-        'surabayaBarat': {
-            'maxRadius': 78
-        },
-        'surabayaSelatan': {
-            'maxRadius': 78
-        },
-        'surabayaTimur': {
-            'maxRadius': 78
-        },
-        'surabayaUtara': {
-            'maxRadius': 78
-        },
-        'surabayaTengah': {
-            'maxRadius': 78
-        },
-    };
-
     $.each(areaLabel, function(key, label){
         label.element.add(new Kinetic.Tag({
             fill: 'blue',
@@ -195,47 +176,48 @@ imageObject.onload = function() {
         });
     });
 
+    //area indicator
     var areaIndicator = {
         'gresik': new Kinetic.Circle({
             x: 78,
             y: 261,
-            radius: areaIndicatorData['gresik'].maxRadius,
+            radius: maxRadius,
             fill: 'red'
         }),
         'sidoarjo': new Kinetic.Circle({
             x: 400,
             y: 522,
-            radius: areaIndicatorData['sidoarjo'].maxRadius,
+            radius: maxRadius,
             fill: 'red'
         }),
         'surabayaBarat': new Kinetic.Circle({
             x: 232,
             y: 222,
-            radius: areaIndicatorData['surabayaBarat'].maxRadius,
+            radius: maxRadius,
             fill: 'red'
         }),
         'surabayaSelatan': new Kinetic.Circle({
             x: 478,
             y: 365,
-            radius: areaIndicatorData['surabayaSelatan'].maxRadius,
+            radius: maxRadius,
             fill: 'red'
         }),
         'surabayaTimur': new Kinetic.Circle({
             x: 722,
             y: 222,
-            radius: areaIndicatorData['surabayaTimur'].maxRadius,
+            radius: maxRadius,
             fill: 'red'
         }),
         'surabayaUtara': new Kinetic.Circle({
             x: 478,
-            y: 222,
-            radius: areaIndicatorData['surabayaUtara'].maxRadius,
+            y: 78,
+            radius: maxRadius,
             fill: 'red'
         }),
         'surabayaTengah': new Kinetic.Circle({
             x: 478,
-            y: 78,
-            radius: areaIndicatorData['surabayaTengah'].maxRadius,
+            y: 222,
+            radius: maxRadius,
             fill: 'red'
         })
     };
@@ -278,17 +260,13 @@ imageObject.onload = function() {
 
     stage.add(layer);
 
-    $.each(areaIndicator, function(key, indicator){
-        layer.add(indicator);
-    });
-
     $.ajax({
         url: 'data.php'
     }).done(function(data){
         data = $.parseJSON(data);
 
         $.each(data.area, function(key, element){
-            var radius = element.density * areaIndicatorData[key].maxRadius;
+            var radius = element.density * maxRadius;
             areaIndicator[key].radius(radius);
         });
 

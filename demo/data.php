@@ -1,6 +1,7 @@
 <?php
 
 $total = 1000000;
+
 $gresik = 100000;
 $sidoarjo = 150000;
 $surabayaBarat = 200000;
